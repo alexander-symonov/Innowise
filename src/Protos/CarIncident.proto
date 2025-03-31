@@ -1,0 +1,8 @@
+syntax = "proto3";
+package DTO.InsuranceIncidents.Car;
+
+message CarIncident {
+  string VIN = 1;
+  string Model = 2;
+  string OwnerNumber = 3;
+}

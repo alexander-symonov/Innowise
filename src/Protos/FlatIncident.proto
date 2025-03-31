@@ -1,0 +1,15 @@
+syntax = "proto3";
+package DTO.InsuranceIncidents.Car;
+
+message FlatIncident {
+  Address Adress = 1;
+  string OwnerNumber = 3;
+
+  message Address{
+    string PostalCode = 1;
+    string Country = 2;
+    string City = 3;
+    string Street = 4;
+    string Building = 5;
+  }
+}
