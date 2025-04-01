@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace DTO.InsuranceIncidents.Car {
+namespace DTO.InsuranceIncidents {
 
   /// <summary>Holder for reflection information generated from CarIncident.proto</summary>
   public static partial class CarIncidentReflection {
@@ -24,13 +24,13 @@ namespace DTO.InsuranceIncidents.Car {
     static CarIncidentReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChFDYXJJbmNpZGVudC5wcm90bxIaRFRPLkluc3VyYW5jZUluY2lkZW50cy5D",
-            "YXIiPgoLQ2FySW5jaWRlbnQSCwoDVklOGAEgASgJEg0KBU1vZGVsGAIgASgJ",
-            "EhMKC093bmVyTnVtYmVyGAMgASgJYgZwcm90bzM="));
+            "ChFDYXJJbmNpZGVudC5wcm90bxIWRFRPLkluc3VyYW5jZUluY2lkZW50cyI+",
+            "CgtDYXJJbmNpZGVudBILCgNWSU4YASABKAkSDQoFTW9kZWwYAiABKAkSEwoL",
+            "T3duZXJOdW1iZXIYAyABKAliBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::DTO.InsuranceIncidents.Car.CarIncident), global::DTO.InsuranceIncidents.Car.CarIncident.Parser, new[]{ "VIN", "Model", "OwnerNumber" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::DTO.InsuranceIncidents.CarIncident), global::DTO.InsuranceIncidents.CarIncident.Parser, new[]{ "VIN", "Model", "OwnerNumber" }, null, null, null, null)
           }));
     }
     #endregion
@@ -52,7 +52,7 @@ namespace DTO.InsuranceIncidents.Car {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::DTO.InsuranceIncidents.Car.CarIncidentReflection.Descriptor.MessageTypes[0]; }
+      get { return global::DTO.InsuranceIncidents.CarIncidentReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

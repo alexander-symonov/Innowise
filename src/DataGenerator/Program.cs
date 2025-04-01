@@ -5,15 +5,15 @@ var brokersList = Environment.GetEnvironmentVariable("BROKERS_LIST") ?? "localho
 var eventGenerator = new EventGenerator(brokersList);
 if(args.Length >= 2)
 {
-    Run(args[0], int.Parse(args[1]));
+    await Run(args[0], int.Parse(args[1]));
 }
 
 do
 {
     Console.WriteLine("Enter command. Example: CarIncident 100");
-    var command = Console.ReadLine().Split(" ");
-    if (command.Length == 2) {
-        Run(command[0], int.Parse(command[1])); 
+    var command = Console.ReadLine()?.Split(" ");
+    if (command?.Length == 2) {
+        await Run(command[0], int.Parse(command[1])); 
     }
     else { 
         Console.WriteLine("Invalid command"); 

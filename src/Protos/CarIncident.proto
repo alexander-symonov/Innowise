@@ -1,5 +1,5 @@
 syntax = "proto3";
-package DTO.InsuranceIncidents.Car;
+package DTO.InsuranceIncidents;
 
 message CarIncident {
   string VIN = 1;

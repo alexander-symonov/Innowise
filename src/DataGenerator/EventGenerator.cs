@@ -1,6 +1,7 @@
 ﻿using Confluent.Kafka;
-using DTO.InsuranceIncidents.Car;
+using DTO.InsuranceIncidents;
 using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 
 namespace DataGenerator
 {
@@ -31,6 +32,7 @@ namespace DataGenerator
             {
                 true when typeof(CarIncident).Name == type => GetCarIncident(),
                 true when typeof(FlatIncident).Name == type => GetFlatIncident(),
+                true when typeof(HealthIncident).Name == type => GetHealthIncident(),
                 _ => throw new ArgumentException("Unsupported model " + type)
             };
         }
@@ -46,6 +48,16 @@ namespace DataGenerator
                     return stream.ToArray();
                 }
             }
+        }
+
+        private HealthIncident GetHealthIncident()
+        {
+            return new HealthIncident()
+            {
+                FirstName = "FirstName" + DateTime.UtcNow.Second,
+                LastName = "LastName" + DateTime.UtcNow.Second,
+                BirthDate = DateTime.UtcNow.AddYears(-Random.Shared.Next(18, 70)).ToTimestamp(),
+            };
         }
 
         private CarIncident GetCarIncident()

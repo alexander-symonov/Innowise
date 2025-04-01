@@ -1,0 +1,25 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
+
+WORKDIR /app
+
+# Copy project files and restore dependencies
+COPY src/DataReader/DataReader.csproj ./DataReader/
+COPY src/DTO/DTO.csproj ./DTO/
+RUN dotnet restore ./DataReader/DataReader.csproj
+
+# Copy all the code into the container
+COPY src/DataReader/ ./DataReader/
+COPY src/DTO/ ./DTO/
+
+# Build the application
+RUN dotnet publish ./DataReader/DataReader.csproj -c Release -o /app/publish
+
+# Use the official .NET Runtime image based on Alpine for running the application
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS runtime
+WORKDIR /app
+
+# Copy from the previous stage
+COPY --from=build /app/publish .
+
+# Run the application
+ENTRYPOINT ["dotnet", "DataReader.dll"]

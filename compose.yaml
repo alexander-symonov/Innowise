@@ -35,10 +35,46 @@ services:
 
   data-generator:
     build:
-      context: ./src/DataGenerator
+      context: .
       dockerfile: /docker/Dockerfile_generator
     environment:
       BROKERS_LIST: kafka:9092
+    depends_on:
+      - kafka
+    networks:
+      - kafka-network
+
+  data-processor-car-incident:
+    build:
+      context: .
+      dockerfile: /docker/Dockerfile_processor
+    environment:
+      BROKERS_LIST: kafka:9092
+      INCIDENT_TYPE: CarIncident
+    depends_on:
+      - kafka
+    networks:
+      - kafka-network
+
+  data-processor-flat-incident:
+    build:
+      context: .
+      dockerfile: /docker/Dockerfile_processor
+    environment:
+      BROKERS_LIST: kafka:9092
+      INCIDENT_TYPE: FlatIncident
+    depends_on:
+      - kafka
+    networks:
+      - kafka-network
+
+  data-processor-health-incident:
+    build:
+      context: .
+      dockerfile: /docker/Dockerfile_processor
+    environment:
+      BROKERS_LIST: kafka:9092
+      INCIDENT_TYPE: HealthIncident
     depends_on:
       - kafka
     networks:

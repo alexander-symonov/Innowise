@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Protos", "Protos", "{02EA68
 	ProjectSection(SolutionItems) = preProject
 		Protos\CarIncident.proto = Protos\CarIncident.proto
 		Protos\FlatIncident.proto = Protos\FlatIncident.proto
+		Protos\HealthIncident.proto = Protos\HealthIncident.proto
 	EndProjectSection
 EndProject
 Global

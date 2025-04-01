@@ -1,0 +1,21 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+package DTO.InsuranceIncidents;
+
+message HealthIncident {
+  string FirstName = 1;
+  string LastName = 2;
+  string Patronymic = 3;
+  google.protobuf.Timestamp BirthDate = 4;
+  
+  HumanAddress Address = 5;
+
+  message HumanAddress{
+    string PostalCode = 1;
+    string Country = 2;
+    string City = 3;
+    string Street = 4;
+    string Building = 5;
+  }
+}

@@ -1,24 +1,19 @@
-# Используем официальный образ .NET SDK на основе Alpine для сборки проекта
 FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 
 WORKDIR /app
 
-# Копируем файлы проекта и восстанавливаем зависимости
-COPY ./src/DataGenerator/DataGenerator.csproj .
-RUN dotnet restore
+COPY src/DataGenerator/DataGenerator.csproj ./DataGenerator/
+COPY src/DTO/DTO.csproj ./DTO/
+RUN dotnet restore ./DataGenerator/DataGenerator.csproj
 
-# Копируем весь код в контейнер
-COPY ./src/DataGenerator/ .
+COPY src/DataGenerator/ ./DataGenerator/
+COPY src/DTO/ ./DTO/
 
-# Сборка приложения
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet publish ./DataGenerator/DataGenerator.csproj -c Release -o /app/publish
 
-# Используем официальный образ .NET Runtime на базе Alpine для исполнения приложения
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS runtime
 WORKDIR /app
 
-# Копируем из предыдущего этапа
 COPY --from=build /app/publish .
 
-# Запуск приложения
 ENTRYPOINT ["dotnet", "DataGenerator.dll"]
