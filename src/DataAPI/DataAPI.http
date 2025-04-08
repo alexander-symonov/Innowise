@@ -1,0 +1,26 @@
+### Add Car Incident
+POST http://localhost:5000/api/insurance/car
+Content-Type: application/json
+
+{
+  "vin": "1HGCM82633A123456",
+  "model": "Honda Accord",
+  "ownerNumber": "12345"
+}
+
+### Add Flat Incident
+POST http://localhost:5000/api/insurance/flat
+Content-Type: application/json
+
+{
+  "address": {
+    "postalCode": "12345",
+    "country": "USA",
+    "city": "New York",
+    "street": "5th Avenue",
+    "building": "10"
+  },
+  "ownerNumber": "67890"
+}
+
+###

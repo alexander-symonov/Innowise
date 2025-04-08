@@ -33,6 +33,23 @@ services:
     networks:
       - kafka-network
 
+  api:
+    image: innowise.api
+    container_name: innowise_api
+    build: 
+      context: .
+      dockerfile: docker/Dockerfile_dataapi
+    ports: 
+      - 8085:8080
+    networks: 
+      - kafka-network
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Kafka__BootstrapServers: kafka:9092
+    depends_on:
+      - kafka
+    networks: 
+      - kafka-network
   data-generator:
     build:
       context: .

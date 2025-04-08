@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Protos", "Protos", "{02EA68
 		Protos\HealthIncident.proto = Protos\HealthIncident.proto
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAPI", "DataAPI\DataAPI.csproj", "{2246F6EF-B06D-4DFA-9729-48C2183231F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{8D49EF93-1FC2-4A94-A2F8-7A9B45A3C7C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D49EF93-1FC2-4A94-A2F8-7A9B45A3C7C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D49EF93-1FC2-4A94-A2F8-7A9B45A3C7C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2246F6EF-B06D-4DFA-9729-48C2183231F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2246F6EF-B06D-4DFA-9729-48C2183231F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2246F6EF-B06D-4DFA-9729-48C2183231F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2246F6EF-B06D-4DFA-9729-48C2183231F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
