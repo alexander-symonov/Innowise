@@ -1,6 +1,7 @@
 services:
   kafka:
     image: bitnami/kafka:latest
+    container_name: innowise_kafka
     environment:
       - KAFKA_ENABLE_KRAFT=yes
       - KAFKA_CFG_PROCESS_ROLES=broker,controller
@@ -41,8 +42,6 @@ services:
       dockerfile: docker/Dockerfile_dataapi
     ports: 
       - 8085:8080
-    networks: 
-      - kafka-network
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       Kafka__BootstrapServers: kafka:9092
@@ -51,11 +50,16 @@ services:
     networks: 
       - kafka-network
   data-generator:
+    container_name: innowise-data-generator
     build:
       context: .
       dockerfile: /docker/Dockerfile_generator
     environment:
-      BROKERS_LIST: kafka:9092
+      Kafka__BootstrapServers: kafka:9092
+      ApiUri: http://api:8085/api/insurance
+      ByApi: true
+    stdin_open: true # docker attach innowise-data-generator
+    tty: true
     depends_on:
       - kafka
     networks:

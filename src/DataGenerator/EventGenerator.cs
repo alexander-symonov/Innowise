@@ -2,27 +2,68 @@
 using DTO.InsuranceIncidents;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using System.Text;
 
 namespace DataGenerator
 {
     public class EventGenerator
     {
-        ProducerConfig _producerConfig;
-        public EventGenerator(string brokerList)
+        public async Task GenerateForKafka(string brokerList, string type, int count, int delayMs)
         {
-            _producerConfig = new ProducerConfig { BootstrapServers = brokerList };
-        }
-        public async Task Generate(string type, int count, int delayMs)
-        {
-            using var producer = new ProducerBuilder<string, byte[]>(_producerConfig).Build();
+            var producerConfig = new ProducerConfig { BootstrapServers = brokerList };
+            using var producer = new ProducerBuilder<string, byte[]>(producerConfig).Build();
             var topicName = "insurance-incidents-" + type;
 
             for (int i = 0; i < count; i++)
             {
                 var message = GenerateEvent(type, i);
-                SendMessage(Serialize(message), producer, topicName);
+                
+                await Task.WhenAll(
+                    SendMessageToKafka(Serialize(message), producer, topicName),
+                    Task.Delay(delayMs));
+            }
+        }
 
-                await Task.Delay(delayMs);
+        private async Task SendMessageToKafka(byte[] eventData, IProducer<string, byte[]> producer, string topic)
+        {
+            try
+            {
+                var deliveryResult = await producer.ProduceAsync(
+                    topic,
+                    new Message<string, byte[]> { Key = Guid.NewGuid().ToString(), Value = eventData });
+
+                Console.WriteLine($"Message delivered to {deliveryResult.TopicPartitionOffset}");
+            }
+            catch (ProduceException<string, byte[]> e)
+            {
+                Console.WriteLine($"Delivery failed: {e.Error.Reason}");
+            }
+        }
+
+        public async Task SendMessageToApi(string apiUrl, string type, int count, int delayMs)
+        {
+            var api = apiUrl + "/" + type.ToLower().Replace("incident", "");
+            using (var client = new HttpClient())
+            {
+                var formatter = new Google.Protobuf.JsonFormatter(new JsonFormatter.Settings(true));
+                for (int i = 0; i < count; i++)
+                {
+                    var message = GenerateEvent(type, i);
+                    var jsonMessage = formatter.Format(message);
+                    var content = new StringContent(jsonMessage, Encoding.UTF8, "application/json");
+                    
+                    var requestTask = client.PostAsync(api, content);
+                    await Task.WhenAll(requestTask, Task.Delay(delayMs));
+
+                    if (requestTask.Result.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("Message sent to API successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to send message to API: {requestTask.Result.StatusCode}");
+                    }
+                }
             }
         }
 
@@ -72,27 +113,19 @@ namespace DataGenerator
 
         private FlatIncident GetFlatIncident()
         {
+            var now = DateTime.UtcNow;
             return new FlatIncident()
             {
-                OwnerNumber = Random.Shared.Next(100).ToString()
+                OwnerNumber = Random.Shared.Next(100).ToString(),
+                Address = new FlatIncident.Types.FlatAddress()
+                {
+                    PostalCode = now.Millisecond.ToString(),
+                    Country = "Country" + now.Second,
+                    City = "City" + now.Second,
+                    Street = "Street" + now.Second,
+                    Building = "Building" + now.Second
+                }
             };
-        }
-
-        private void SendMessage(byte[] eventData, IProducer<string, byte[]> producer, string topic)
-        {
-            try
-            {
-                var deliveryResult = producer.ProduceAsync(
-                    topic, 
-                    new Message<string, byte[]> { Key = Guid.NewGuid().ToString(), Value = eventData })
-                    .GetAwaiter().GetResult();
-                
-                Console.WriteLine($"Message delivered to {deliveryResult.TopicPartitionOffset}");
-            }
-            catch (ProduceException<string, byte[]> e)
-            {
-                Console.WriteLine($"Delivery failed: {e.Error.Reason}");
-            }
         }
     }
 }
