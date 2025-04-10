@@ -1,49 +1,85 @@
 ﻿using DataGenerator;
+using System.Text;
 
-var deleayMs = 100;
-var brokersList = Environment.GetEnvironmentVariable("Kafka__BootstrapServers") ?? "localhost:9095";
-var apiUri = Environment.GetEnvironmentVariable("ApiUri") ?? "http://localhost:8085/api/insurance";
-var byApiParam = Environment.GetEnvironmentVariable("ByApi");
-var byApi = true;
-if(!string.IsNullOrEmpty(byApiParam))
+var generationProvider = new GenerationProvider();
+generationProvider.BrokersList = Environment.GetEnvironmentVariable("KafkaBootstrapServers") ?? "localhost:9095";
+generationProvider.TopicNamePrefix = Environment.GetEnvironmentVariable("KafkaTopicNamePrefix") ?? "insurance-incidents-";
+generationProvider.ApiUri = Environment.GetEnvironmentVariable("ApiUri") ?? "http://localhost:8085/api/insurance";
+var byApiParam = Environment.GetEnvironmentVariable("ByApi") ?? "true";
+generationProvider.ByApi = bool.TryParse(byApiParam, out var byApi) && byApi;
+generationProvider.DelayMs = int.TryParse(Environment.GetEnvironmentVariable("DelayMs"), out var delay) ? delay : 100;
+var botToken = Environment.GetEnvironmentVariable("TelegramBotToken");
+using var generationServiceRunningCancelationToken = new CancellationTokenSource();
+if (!string.IsNullOrEmpty(botToken))
 {
-    byApi = bool.Parse(byApiParam);
+    var telegrammHandlerTask = new TelegramBotHandler(botToken, generationProvider).Run(generationServiceRunningCancelationToken.Token);
 }
-var eventGenerator = new EventGenerator();
-if(args.Length >= 2)
+
+// Run generation using input params
+if (args.Length >= 2)
 {
-    await Run(args[0], int.Parse(args[1]));
+    await generationProvider.Generate(args[0], int.Parse(args[1]), CreateNewState());
 }
 
-do
-{
-    Console.WriteLine("Enter command. Example: CarIncident 100");
-    var commandText = Console.ReadLine();
-    var command = commandText?.Split(" ");
-    if (command?.Length == 2) {
-        await Run(command[0], int.Parse(command[1])); 
-    }
-    else { 
-        Console.WriteLine("Invalid command :" + commandText); 
-    }
-} while (true);
+Console.WriteLine("Enter command. Example: CarIncident 100");
+var commandbuilder = new StringBuilder();
 
+// Wait for user input and process commands
+await RunLoop();
 
-async Task Run(string type, int count)
+generationServiceRunningCancelationToken.Cancel();
+
+async Task RunLoop()
 {
-    try
+    while (true)
     {
-        if(byApi)
+        if (!generationProvider.Active)
         {
-            await eventGenerator.SendMessageToApi(apiUri, type, count, deleayMs);
+            return;
         }
-        else
+
+        if (Console.KeyAvailable)
         {
-            await eventGenerator.GenerateForKafka(brokersList, type, count, deleayMs);
+            ConsoleKeyInfo key = Console.ReadKey(true);
+            switch (key.Key)
+            {
+                case ConsoleKey.Escape:
+                    return;
+                case ConsoleKey.Enter:
+                    if (!generationProvider.Active)
+                    {
+                        break;
+                    }
+                    var commandText = commandbuilder.ToString();
+                    var command = commandText.Split(" ");
+                    if (command?.Length == 2)
+                    {
+                        try
+                        {
+                            await generationProvider.Generate(command[0], int.Parse(command[1]), CreateNewState());
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid command :" + commandText);
+                    }
+                    commandbuilder.Clear();
+                    break;
+                default:
+                    commandbuilder.Append(key.KeyChar);
+                    Console.Write(key.KeyChar);
+                    break;
+            }
         }
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine(ex);
-    }
+}
+
+StateMediator CreateNewState()
+{
+    var latestGenerationState = new CancellationTokenSource();
+    return new StateMediator(latestGenerationState.Token);
 }

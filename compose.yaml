@@ -55,9 +55,12 @@ services:
       context: .
       dockerfile: /docker/Dockerfile_generator
     environment:
-      Kafka__BootstrapServers: kafka:9092
-      ApiUri: http://api:8085/api/insurance
+      KafkaBootstrapServers: kafka:9092,
+      KafkaTopicNamePrefix: insurance-incidents-
+      DelayMs: 10
+      ApiUri: http://api:8080/api/insurance
       ByApi: true
+      TelegramBotToken: ${TELEGRAM_BOT_TOKEN}
     stdin_open: true # docker attach innowise-data-generator
     tty: true
     depends_on:

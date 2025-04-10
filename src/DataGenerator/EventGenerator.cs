@@ -8,19 +8,27 @@ namespace DataGenerator
 {
     public class EventGenerator
     {
-        public async Task GenerateForKafka(string brokerList, string type, int count, int delayMs)
+        public async Task GenerateForKafka(string brokerList, string topicNamePrefix, string type, int count, int delayMs, StateMediator state)
         {
             var producerConfig = new ProducerConfig { BootstrapServers = brokerList };
             using var producer = new ProducerBuilder<string, byte[]>(producerConfig).Build();
-            var topicName = "insurance-incidents-" + type;
+            var topicName = topicNamePrefix + type;
 
             for (int i = 0; i < count; i++)
             {
+                if (state.Token.IsCancellationRequested)
+                {
+                    Console.WriteLine("Cancellation requested. Stopping message generation.");
+                    break;
+                }
+
                 var message = GenerateEvent(type, i);
                 
                 await Task.WhenAll(
                     SendMessageToKafka(Serialize(message), producer, topicName),
                     Task.Delay(delayMs));
+
+                state.SucsessCounter++;
             }
         }
 
@@ -40,14 +48,22 @@ namespace DataGenerator
             }
         }
 
-        public async Task SendMessageToApi(string apiUrl, string type, int count, int delayMs)
+        public async Task SendMessageToApi(string apiUrl, string type, int count, int delayMs, StateMediator state)
         {
             var api = apiUrl + "/" + type.ToLower().Replace("incident", "");
             using (var client = new HttpClient())
             {
                 var formatter = new Google.Protobuf.JsonFormatter(new JsonFormatter.Settings(true));
+
+                Console.WriteLine($"Sending {count} messages to API: {api}");
+
                 for (int i = 0; i < count; i++)
                 {
+                    if(state.Token.IsCancellationRequested)
+                    {
+                        Console.WriteLine("Cancellation requested. Stopping message generation.");
+                        break;
+                    }
                     var message = GenerateEvent(type, i);
                     var jsonMessage = formatter.Format(message);
                     var content = new StringContent(jsonMessage, Encoding.UTF8, "application/json");
@@ -57,11 +73,13 @@ namespace DataGenerator
 
                     if (requestTask.Result.IsSuccessStatusCode)
                     {
-                        Console.WriteLine("Message sent to API successfully.");
+                        Console.WriteLine($"Message {i} sent to API successfully.");
+                        state.SucsessCounter++;
                     }
                     else
                     {
-                        Console.WriteLine($"Failed to send message to API: {requestTask.Result.StatusCode}");
+                        Console.WriteLine($"Failed to send message {i} to API: {requestTask.Result.StatusCode}");
+                        state.FailedCounter++;
                     }
                 }
             }
@@ -73,7 +91,7 @@ namespace DataGenerator
             {
                 true when typeof(CarIncident).Name == type => GetCarIncident(),
                 true when typeof(FlatIncident).Name == type => GetFlatIncident(),
-                true when typeof(HealthIncident).Name == type => GetHealthIncident(),
+                true when typeof(HealthIncident).Name == type => GetHealthIncident(number),
                 _ => throw new ArgumentException("Unsupported model " + type)
             };
         }
@@ -91,12 +109,12 @@ namespace DataGenerator
             }
         }
 
-        private HealthIncident GetHealthIncident()
+        private HealthIncident GetHealthIncident(int number)
         {
             return new HealthIncident()
             {
-                FirstName = "FirstName" + DateTime.UtcNow.Second,
-                LastName = "LastName" + DateTime.UtcNow.Second,
+                FirstName = "FirstName" + number,
+                LastName = "LastName" + number,
                 BirthDate = DateTime.UtcNow.AddYears(-Random.Shared.Next(18, 70)).ToTimestamp(),
             };
         }
