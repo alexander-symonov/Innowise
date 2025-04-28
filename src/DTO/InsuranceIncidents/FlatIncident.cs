@@ -25,15 +25,16 @@ namespace DTO.InsuranceIncidents {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChJGbGF0SW5jaWRlbnQucHJvdG8SFkRUTy5JbnN1cmFuY2VJbmNpZGVudHMi",
-            "ygEKDEZsYXRJbmNpZGVudBJBCgdBZGRyZXNzGAEgASgLMjAuRFRPLkluc3Vy",
+            "2AEKDEZsYXRJbmNpZGVudBJBCgdBZGRyZXNzGAEgASgLMjAuRFRPLkluc3Vy",
             "YW5jZUluY2lkZW50cy5GbGF0SW5jaWRlbnQuRmxhdEFkZHJlc3MSEwoLT3du",
-            "ZXJOdW1iZXIYAyABKAkaYgoLRmxhdEFkZHJlc3MSEgoKUG9zdGFsQ29kZRgB",
-            "IAEoCRIPCgdDb3VudHJ5GAIgASgJEgwKBENpdHkYAyABKAkSDgoGU3RyZWV0",
-            "GAQgASgJEhAKCEJ1aWxkaW5nGAUgASgJYgZwcm90bzM="));
+            "ZXJOdW1iZXIYAyABKAkSDAoEVGFncxgEIAMoCRpiCgtGbGF0QWRkcmVzcxIS",
+            "CgpQb3N0YWxDb2RlGAEgASgJEg8KB0NvdW50cnkYAiABKAkSDAoEQ2l0eRgD",
+            "IAEoCRIOCgZTdHJlZXQYBCABKAkSEAoIQnVpbGRpbmcYBSABKAliBnByb3Rv",
+            "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::DTO.InsuranceIncidents.FlatIncident), global::DTO.InsuranceIncidents.FlatIncident.Parser, new[]{ "Address", "OwnerNumber" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::DTO.InsuranceIncidents.FlatIncident.Types.FlatAddress), global::DTO.InsuranceIncidents.FlatIncident.Types.FlatAddress.Parser, new[]{ "PostalCode", "Country", "City", "Street", "Building" }, null, null, null, null)})
+            new pbr::GeneratedClrTypeInfo(typeof(global::DTO.InsuranceIncidents.FlatIncident), global::DTO.InsuranceIncidents.FlatIncident.Parser, new[]{ "Address", "OwnerNumber", "Tags" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::DTO.InsuranceIncidents.FlatIncident.Types.FlatAddress), global::DTO.InsuranceIncidents.FlatIncident.Types.FlatAddress.Parser, new[]{ "PostalCode", "Country", "City", "Street", "Building" }, null, null, null, null)})
           }));
     }
     #endregion
@@ -77,6 +78,7 @@ namespace DTO.InsuranceIncidents {
     public FlatIncident(FlatIncident other) : this() {
       address_ = other.address_ != null ? other.address_.Clone() : null;
       ownerNumber_ = other.ownerNumber_;
+      tags_ = other.tags_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -110,6 +112,17 @@ namespace DTO.InsuranceIncidents {
       }
     }
 
+    /// <summary>Field number for the "Tags" field.</summary>
+    public const int TagsFieldNumber = 4;
+    private static readonly pb::FieldCodec<string> _repeated_tags_codec
+        = pb::FieldCodec.ForString(34);
+    private readonly pbc::RepeatedField<string> tags_ = new pbc::RepeatedField<string>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<string> Tags {
+      get { return tags_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -127,6 +140,7 @@ namespace DTO.InsuranceIncidents {
       }
       if (!object.Equals(Address, other.Address)) return false;
       if (OwnerNumber != other.OwnerNumber) return false;
+      if(!tags_.Equals(other.tags_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -136,6 +150,7 @@ namespace DTO.InsuranceIncidents {
       int hash = 1;
       if (address_ != null) hash ^= Address.GetHashCode();
       if (OwnerNumber.Length != 0) hash ^= OwnerNumber.GetHashCode();
+      hash ^= tags_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -162,6 +177,7 @@ namespace DTO.InsuranceIncidents {
         output.WriteRawTag(26);
         output.WriteString(OwnerNumber);
       }
+      tags_.WriteTo(output, _repeated_tags_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -180,6 +196,7 @@ namespace DTO.InsuranceIncidents {
         output.WriteRawTag(26);
         output.WriteString(OwnerNumber);
       }
+      tags_.WriteTo(ref output, _repeated_tags_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -196,6 +213,7 @@ namespace DTO.InsuranceIncidents {
       if (OwnerNumber.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(OwnerNumber);
       }
+      size += tags_.CalculateSize(_repeated_tags_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -217,6 +235,7 @@ namespace DTO.InsuranceIncidents {
       if (other.OwnerNumber.Length != 0) {
         OwnerNumber = other.OwnerNumber;
       }
+      tags_.Add(other.tags_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -247,6 +266,10 @@ namespace DTO.InsuranceIncidents {
             OwnerNumber = input.ReadString();
             break;
           }
+          case 34: {
+            tags_.AddEntriesFrom(input, _repeated_tags_codec);
+            break;
+          }
         }
       }
     #endif
@@ -275,6 +298,10 @@ namespace DTO.InsuranceIncidents {
           }
           case 26: {
             OwnerNumber = input.ReadString();
+            break;
+          }
+          case 34: {
+            tags_.AddEntriesFrom(ref input, _repeated_tags_codec);
             break;
           }
         }

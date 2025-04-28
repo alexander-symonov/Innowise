@@ -1,6 +1,6 @@
 ﻿namespace DataReader
 {
-    interface IProcessor
+    public interface IProcessor
     {
         public Task ProcessAsync(byte[] data, CancellationToken cancellationToken);
     }

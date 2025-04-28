@@ -1,8 +1,4 @@
 using Confluent.Kafka;
-using DTO.InsuranceIncidents;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace DataReader
 {
@@ -11,17 +7,19 @@ namespace DataReader
         private readonly string _brokerList;
         private readonly string _topic;
         private readonly string _groupId;
+        private readonly IProcessorFactory _processorFactory;
 
-        public KafkaConsumer(string brokerList, string topic, string groupId)
+        public KafkaConsumer(string brokerList, string topic, string groupId, IProcessorFactory processorFactory)
         {
             _brokerList = brokerList;
             _topic = topic;
             _groupId = groupId;
+            _processorFactory = processorFactory ?? throw new ArgumentNullException(nameof(processorFactory));
         }
 
         public async Task ConsumeMessages(CancellationToken cancellationToken, string messageType)
         {
-            var messageProcessor = ProcessorFactory.CreateProcessor(messageType);
+            var messageProcessor = _processorFactory.CreateProcessor(messageType);
             var config = new ConsumerConfig
             {
                 BootstrapServers = _brokerList,
@@ -40,7 +38,7 @@ namespace DataReader
                     {
                         var consumeResult = consumer.Consume(cancellationToken);
                         Console.WriteLine($"Message received from {consumeResult.TopicPartitionOffset}");
-                        await messageProcessor.ProcessAsync(consumeResult.Message.Value, cancellationToken);                        
+                        await messageProcessor.ProcessAsync(consumeResult.Message.Value, cancellationToken);
                     }
                     catch (ConsumeException e)
                     {

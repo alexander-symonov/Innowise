@@ -4,6 +4,7 @@ package DTO.InsuranceIncidents;
 message FlatIncident {
   FlatAddress Address = 1;
   string OwnerNumber = 3;
+  repeated string Tags = 4;
 
   message FlatAddress{
     string PostalCode = 1;

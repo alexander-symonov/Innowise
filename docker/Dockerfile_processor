@@ -5,11 +5,15 @@ WORKDIR /app
 # Copy project files and restore dependencies
 COPY src/DataReader/DataReader.csproj ./DataReader/
 COPY src/DTO/DTO.csproj ./DTO/
+COPY src/Data.Core/Data.Core.csproj ./Data.Core/
+COPY src/Data.Core.Mongo/Data.Core.Mongo.csproj ./Data.Core.Mongo/
 RUN dotnet restore ./DataReader/DataReader.csproj
 
 # Copy all the code into the container
 COPY src/DataReader/ ./DataReader/
 COPY src/DTO/ ./DTO/
+COPY src/Data.Core.Mongo/ ./Data.Core.Mongo/
+COPY src/Data.Core/ ./Data.Core/
 
 # Build the application
 RUN dotnet publish ./DataReader/DataReader.csproj -c Release -o /app/publish

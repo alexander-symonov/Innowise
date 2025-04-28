@@ -24,13 +24,13 @@ namespace DTO.InsuranceIncidents {
     static CarIncidentReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChFDYXJJbmNpZGVudC5wcm90bxIWRFRPLkluc3VyYW5jZUluY2lkZW50cyI+",
+            "ChFDYXJJbmNpZGVudC5wcm90bxIWRFRPLkluc3VyYW5jZUluY2lkZW50cyJM",
             "CgtDYXJJbmNpZGVudBILCgNWSU4YASABKAkSDQoFTW9kZWwYAiABKAkSEwoL",
-            "T3duZXJOdW1iZXIYAyABKAliBnByb3RvMw=="));
+            "T3duZXJOdW1iZXIYAyABKAkSDAoEVGFncxgEIAMoCWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::DTO.InsuranceIncidents.CarIncident), global::DTO.InsuranceIncidents.CarIncident.Parser, new[]{ "VIN", "Model", "OwnerNumber" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::DTO.InsuranceIncidents.CarIncident), global::DTO.InsuranceIncidents.CarIncident.Parser, new[]{ "VIN", "Model", "OwnerNumber", "Tags" }, null, null, null, null)
           }));
     }
     #endregion
@@ -75,6 +75,7 @@ namespace DTO.InsuranceIncidents {
       vIN_ = other.vIN_;
       model_ = other.model_;
       ownerNumber_ = other.ownerNumber_;
+      tags_ = other.tags_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -120,6 +121,17 @@ namespace DTO.InsuranceIncidents {
       }
     }
 
+    /// <summary>Field number for the "Tags" field.</summary>
+    public const int TagsFieldNumber = 4;
+    private static readonly pb::FieldCodec<string> _repeated_tags_codec
+        = pb::FieldCodec.ForString(34);
+    private readonly pbc::RepeatedField<string> tags_ = new pbc::RepeatedField<string>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<string> Tags {
+      get { return tags_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -138,6 +150,7 @@ namespace DTO.InsuranceIncidents {
       if (VIN != other.VIN) return false;
       if (Model != other.Model) return false;
       if (OwnerNumber != other.OwnerNumber) return false;
+      if(!tags_.Equals(other.tags_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -148,6 +161,7 @@ namespace DTO.InsuranceIncidents {
       if (VIN.Length != 0) hash ^= VIN.GetHashCode();
       if (Model.Length != 0) hash ^= Model.GetHashCode();
       if (OwnerNumber.Length != 0) hash ^= OwnerNumber.GetHashCode();
+      hash ^= tags_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -178,6 +192,7 @@ namespace DTO.InsuranceIncidents {
         output.WriteRawTag(26);
         output.WriteString(OwnerNumber);
       }
+      tags_.WriteTo(output, _repeated_tags_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -200,6 +215,7 @@ namespace DTO.InsuranceIncidents {
         output.WriteRawTag(26);
         output.WriteString(OwnerNumber);
       }
+      tags_.WriteTo(ref output, _repeated_tags_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -219,6 +235,7 @@ namespace DTO.InsuranceIncidents {
       if (OwnerNumber.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(OwnerNumber);
       }
+      size += tags_.CalculateSize(_repeated_tags_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -240,6 +257,7 @@ namespace DTO.InsuranceIncidents {
       if (other.OwnerNumber.Length != 0) {
         OwnerNumber = other.OwnerNumber;
       }
+      tags_.Add(other.tags_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -271,6 +289,10 @@ namespace DTO.InsuranceIncidents {
             OwnerNumber = input.ReadString();
             break;
           }
+          case 34: {
+            tags_.AddEntriesFrom(input, _repeated_tags_codec);
+            break;
+          }
         }
       }
     #endif
@@ -300,6 +322,10 @@ namespace DTO.InsuranceIncidents {
           }
           case 26: {
             OwnerNumber = input.ReadString();
+            break;
+          }
+          case 34: {
+            tags_.AddEntriesFrom(ref input, _repeated_tags_codec);
             break;
           }
         }

@@ -111,30 +111,47 @@ namespace DataGenerator
 
         private HealthIncident GetHealthIncident(int number)
         {
-            return new HealthIncident()
+            var now = DateTime.UtcNow;
+            var healthIncident = new HealthIncident()
             {
                 FirstName = "FirstName" + number,
                 LastName = "LastName" + number,
                 BirthDate = DateTime.UtcNow.AddYears(-Random.Shared.Next(18, 70)).ToTimestamp(),
+                Address = new HealthIncident.Types.HumanAddress()
+                {
+                    PostalCode = now.Millisecond.ToString(),
+                    Country = "Country" + now.Second,
+                    City = "City" + now.Second,
+                    Street = "Street" + now.Second,
+                    Building = "Building" + now.Second
+                },
             };
+            healthIncident.Tags.AddRange(GenerateRandomTags());
+
+            return healthIncident;
         }
 
         private CarIncident GetCarIncident()
         {
-            return new CarIncident()
+            var carIncident = new CarIncident()
             {
                 VIN = Guid.NewGuid().ToString(),
                 Model = "Model" + DateTime.UtcNow.Second,
                 OwnerNumber = Random.Shared.Next(100).ToString()
             };
+
+            carIncident.Tags.AddRange(GenerateRandomTags());
+
+            return carIncident;
         }
 
         private FlatIncident GetFlatIncident()
         {
             var now = DateTime.UtcNow;
-            return new FlatIncident()
+            var flatIncident =new FlatIncident()
             {
                 OwnerNumber = Random.Shared.Next(100).ToString(),
+                
                 Address = new FlatIncident.Types.FlatAddress()
                 {
                     PostalCode = now.Millisecond.ToString(),
@@ -144,6 +161,20 @@ namespace DataGenerator
                     Building = "Building" + now.Second
                 }
             };
+            flatIncident.Tags.AddRange(GenerateRandomTags());
+
+            return flatIncident;
+        }
+
+        private List<string> GenerateRandomTags()
+        {
+            var tags = new List<string>();
+            int tagCount = Random.Shared.Next(0, 6); // Generate between 0 and 5 tags  
+            for (int i = 0; i < tagCount; i++)
+            {
+                tags.Add("tag" + Random.Shared.Next(1, 100));
+            }
+            return tags;
         }
     }
 }

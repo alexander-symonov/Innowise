@@ -5,4 +5,5 @@ message CarIncident {
   string VIN = 1;
   string Model = 2;
   string OwnerNumber = 3;
+  repeated string Tags = 4;
 }

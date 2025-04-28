@@ -8,8 +8,8 @@ message HealthIncident {
   string LastName = 2;
   string Patronymic = 3;
   google.protobuf.Timestamp BirthDate = 4;
-  
   HumanAddress Address = 5;
+  repeated string Tags = 6;
 
   message HumanAddress{
     string PostalCode = 1;

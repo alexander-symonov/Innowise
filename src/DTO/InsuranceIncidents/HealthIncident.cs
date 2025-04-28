@@ -25,18 +25,18 @@ namespace DTO.InsuranceIncidents {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChRIZWFsdGhJbmNpZGVudC5wcm90bxIWRFRPLkluc3VyYW5jZUluY2lkZW50",
-            "cxofZ29vZ2xlL3Byb3RvYnVmL3RpbWVzdGFtcC5wcm90byKjAgoOSGVhbHRo",
+            "cxofZ29vZ2xlL3Byb3RvYnVmL3RpbWVzdGFtcC5wcm90byKxAgoOSGVhbHRo",
             "SW5jaWRlbnQSEQoJRmlyc3ROYW1lGAEgASgJEhAKCExhc3ROYW1lGAIgASgJ",
             "EhIKClBhdHJvbnltaWMYAyABKAkSLQoJQmlydGhEYXRlGAQgASgLMhouZ29v",
             "Z2xlLnByb3RvYnVmLlRpbWVzdGFtcBJECgdBZGRyZXNzGAUgASgLMjMuRFRP",
             "Lkluc3VyYW5jZUluY2lkZW50cy5IZWFsdGhJbmNpZGVudC5IdW1hbkFkZHJl",
-            "c3MaYwoMSHVtYW5BZGRyZXNzEhIKClBvc3RhbENvZGUYASABKAkSDwoHQ291",
-            "bnRyeRgCIAEoCRIMCgRDaXR5GAMgASgJEg4KBlN0cmVldBgEIAEoCRIQCghC",
-            "dWlsZGluZxgFIAEoCWIGcHJvdG8z"));
+            "c3MSDAoEVGFncxgGIAMoCRpjCgxIdW1hbkFkZHJlc3MSEgoKUG9zdGFsQ29k",
+            "ZRgBIAEoCRIPCgdDb3VudHJ5GAIgASgJEgwKBENpdHkYAyABKAkSDgoGU3Ry",
+            "ZWV0GAQgASgJEhAKCEJ1aWxkaW5nGAUgASgJYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::DTO.InsuranceIncidents.HealthIncident), global::DTO.InsuranceIncidents.HealthIncident.Parser, new[]{ "FirstName", "LastName", "Patronymic", "BirthDate", "Address" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::DTO.InsuranceIncidents.HealthIncident.Types.HumanAddress), global::DTO.InsuranceIncidents.HealthIncident.Types.HumanAddress.Parser, new[]{ "PostalCode", "Country", "City", "Street", "Building" }, null, null, null, null)})
+            new pbr::GeneratedClrTypeInfo(typeof(global::DTO.InsuranceIncidents.HealthIncident), global::DTO.InsuranceIncidents.HealthIncident.Parser, new[]{ "FirstName", "LastName", "Patronymic", "BirthDate", "Address", "Tags" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::DTO.InsuranceIncidents.HealthIncident.Types.HumanAddress), global::DTO.InsuranceIncidents.HealthIncident.Types.HumanAddress.Parser, new[]{ "PostalCode", "Country", "City", "Street", "Building" }, null, null, null, null)})
           }));
     }
     #endregion
@@ -83,6 +83,7 @@ namespace DTO.InsuranceIncidents {
       patronymic_ = other.patronymic_;
       birthDate_ = other.birthDate_ != null ? other.birthDate_.Clone() : null;
       address_ = other.address_ != null ? other.address_.Clone() : null;
+      tags_ = other.tags_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -152,6 +153,17 @@ namespace DTO.InsuranceIncidents {
       }
     }
 
+    /// <summary>Field number for the "Tags" field.</summary>
+    public const int TagsFieldNumber = 6;
+    private static readonly pb::FieldCodec<string> _repeated_tags_codec
+        = pb::FieldCodec.ForString(50);
+    private readonly pbc::RepeatedField<string> tags_ = new pbc::RepeatedField<string>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<string> Tags {
+      get { return tags_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -172,6 +184,7 @@ namespace DTO.InsuranceIncidents {
       if (Patronymic != other.Patronymic) return false;
       if (!object.Equals(BirthDate, other.BirthDate)) return false;
       if (!object.Equals(Address, other.Address)) return false;
+      if(!tags_.Equals(other.tags_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -184,6 +197,7 @@ namespace DTO.InsuranceIncidents {
       if (Patronymic.Length != 0) hash ^= Patronymic.GetHashCode();
       if (birthDate_ != null) hash ^= BirthDate.GetHashCode();
       if (address_ != null) hash ^= Address.GetHashCode();
+      hash ^= tags_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -222,6 +236,7 @@ namespace DTO.InsuranceIncidents {
         output.WriteRawTag(42);
         output.WriteMessage(Address);
       }
+      tags_.WriteTo(output, _repeated_tags_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -252,6 +267,7 @@ namespace DTO.InsuranceIncidents {
         output.WriteRawTag(42);
         output.WriteMessage(Address);
       }
+      tags_.WriteTo(ref output, _repeated_tags_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -277,6 +293,7 @@ namespace DTO.InsuranceIncidents {
       if (address_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Address);
       }
+      size += tags_.CalculateSize(_repeated_tags_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -310,6 +327,7 @@ namespace DTO.InsuranceIncidents {
         }
         Address.MergeFrom(other.Address);
       }
+      tags_.Add(other.tags_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -355,6 +373,10 @@ namespace DTO.InsuranceIncidents {
             input.ReadMessage(Address);
             break;
           }
+          case 50: {
+            tags_.AddEntriesFrom(input, _repeated_tags_codec);
+            break;
+          }
         }
       }
     #endif
@@ -398,6 +420,10 @@ namespace DTO.InsuranceIncidents {
               Address = new global::DTO.InsuranceIncidents.HealthIncident.Types.HumanAddress();
             }
             input.ReadMessage(Address);
+            break;
+          }
+          case 50: {
+            tags_.AddEntriesFrom(ref input, _repeated_tags_codec);
             break;
           }
         }
