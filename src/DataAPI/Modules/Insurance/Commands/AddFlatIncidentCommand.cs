@@ -32,7 +32,8 @@ namespace DataAPI.Modules.Insurance.Commands
                     Street = context.Address.Street,
                     Building = context.Address.Building
                 },
-                OwnerNumber = context.OwnerNumber
+                OwnerNumber = context.OwnerNumber,
+                Tags = { context.Tags }
             };
 
             return SendMessage(Serialize(message), _producer, _topicName);

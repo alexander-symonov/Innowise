@@ -25,7 +25,8 @@ namespace DataAPI.Modules.Insurance.Commands
             var message = new DTO.InsuranceIncidents.CarIncident() { 
                 Model = context.Model,
                 OwnerNumber = context.OwnerNumber,
-                VIN = context.VIN
+                VIN = context.VIN,
+                Tags = { context.Tags }
             };
 
             return SendMessage(Serialize(message), _producer, _topicName);

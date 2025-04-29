@@ -7,6 +7,7 @@
         public string Patronymic { get; set; } = string.Empty;
         public DateTime BirthDate { get; set; }
         public HumanAddress Address { get; set; } = new HumanAddress();
+        public IEnumerable<string> Tags { get; set; } = Enumerable.Empty<string>();
 
         public class HumanAddress
         {

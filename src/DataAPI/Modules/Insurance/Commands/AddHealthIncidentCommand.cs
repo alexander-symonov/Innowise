@@ -29,6 +29,7 @@ namespace DataAPI.Modules.Insurance.Commands
                 LastName = context.LastName,
                 Patronymic = context.Patronymic,
                 BirthDate = context.BirthDate.ToTimestamp(),
+                Tags = { context.Tags },
                 Address = new DTO.InsuranceIncidents.HealthIncident.Types.HumanAddress()
                 {
                     PostalCode = context.Address.PostalCode,

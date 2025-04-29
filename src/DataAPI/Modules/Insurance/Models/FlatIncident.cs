@@ -4,6 +4,7 @@
     {
         public required FlatAddress Address { get; set; }
         public required string OwnerNumber { get; set; }
+        public IEnumerable<string> Tags { get; set; } = Enumerable.Empty<string>();
         public class FlatAddress
         {
             public required string PostalCode { get; set; }

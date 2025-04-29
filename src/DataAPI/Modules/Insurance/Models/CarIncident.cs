@@ -5,5 +5,6 @@
         public string VIN { get; set; } = string.Empty;
         public string Model { get; set; } = string.Empty;
         public string OwnerNumber { get; set; } = string.Empty;
+        public IEnumerable<string> Tags { get; set; } = Enumerable.Empty<string>();
     }
 }
