@@ -4,24 +4,36 @@ using Data.Core.Mongo.Commands;
 using DataReader;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
+using Microsoft.Extensions.Configuration;
+using DataReader.Settings;
 
-var brokersList = Environment.GetEnvironmentVariable("BROKERS_LIST") ?? "localhost:9095";
-var incidentType = Environment.GetEnvironmentVariable("INCIDENT_TYPE") ?? "CarIncident";
-var topic = "insurance-incidents-" + incidentType;
-var groupId = "insurance-incident-group-"+ incidentType;
+var dbSettings = new InsuranceIncidentsDatabaseSettings();
+var kafkaSettings = new KafkaSettings();
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables()
+    .Build();
 
-var mongoConnectionString = Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING") ?? "mongodb://localhost:27017";
-// Configuration.GetConnectionString("MongoDb")
+configuration.Bind(ConfigSections.DatabaseSectionName, dbSettings);
+configuration.Bind(ConfigSections.KafkaSectionName, kafkaSettings);
+
+var incidentType = configuration.GetValue<string>("INCIDENT_TYPE") ?? "CarIncident";
+var topic = kafkaSettings.TopicPrefix + incidentType;
+var groupId = kafkaSettings.GroupPrefix + incidentType;
 
 //setup our DI
 var serviceProvider = new ServiceCollection()
     //.AddLogging()
-    .AddSingleton<IMongoClient>(s => new MongoClient(mongoConnectionString))
-    .AddSingleton<IStoreCarIncidentCommand, StoreCarIncidentCommand>()
+    .AddSingleton<IMongoClient>(s => new MongoClient(dbSettings.ConnectionString))
+    .AddSingleton<IStoreCarIncidentCommand>(x => new StoreCarIncidentCommand(
+        x.GetService<IMongoClient>(), 
+        dbSettings.DatabaseName, 
+        dbSettings.CarIncidentsCollectionName))
     .BuildServiceProvider();
 
 var processorFactory = new ProcessorFactory(serviceProvider);
-var kafkaConsumer = new DataReader.KafkaConsumer(brokersList, topic, groupId, processorFactory);
+var kafkaConsumer = new DataReader.KafkaConsumer(kafkaSettings.BrokersList, topic, groupId, processorFactory);
 
 var cts = new CancellationTokenSource();
 Console.CancelKeyPress += (_, e) =>

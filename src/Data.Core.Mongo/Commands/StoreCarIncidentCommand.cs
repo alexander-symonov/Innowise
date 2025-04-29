@@ -8,10 +8,14 @@ namespace Data.Core.Mongo.Commands
     {
         IMongoCollection<CarIncident> _carIncidentsCollection;
 
-        public StoreCarIncidentCommand(IMongoClient mongoClient)
+        public StoreCarIncidentCommand(
+            IMongoClient mongoClient,
+            string databaseName = "insurance",
+            string collectionName = "car_incidents"
+            )
         {
-            _carIncidentsCollection = mongoClient.GetDatabase("InsuranceIncidents")
-                .GetCollection<CarIncident>("CarIncidents");
+            _carIncidentsCollection = mongoClient.GetDatabase(databaseName)
+                .GetCollection<CarIncident>(collectionName);
         }
 
         public async Task ExecuteAsync(CarIncident carIncident, CancellationToken cancellationToken)

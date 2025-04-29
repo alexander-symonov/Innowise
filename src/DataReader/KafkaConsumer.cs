@@ -24,10 +24,17 @@ namespace DataReader
             {
                 BootstrapServers = _brokerList,
                 GroupId = _groupId,
-                AutoOffsetReset = AutoOffsetReset.Earliest
+                EnableAutoCommit = false,
+                AutoOffsetReset = AutoOffsetReset.Earliest,
+                
             };
 
             using var consumer = new ConsumerBuilder<Ignore, byte[]>(config).Build();
+            //consumer.Assign(new List<TopicPartitionOffset>
+            //{
+            //    new TopicPartitionOffset(_topic, 0, Offset.Beginning)
+            //});
+            //consumer.Seek(new TopicPartitionOffset(_topic, 0, Offset.Beginning));
             consumer.Subscribe(_topic);
 
             try
@@ -39,6 +46,8 @@ namespace DataReader
                         var consumeResult = consumer.Consume(cancellationToken);
                         Console.WriteLine($"Message received from {consumeResult.TopicPartitionOffset}");
                         await messageProcessor.ProcessAsync(consumeResult.Message.Value, cancellationToken);
+
+                        consumer.Commit(consumeResult);
                     }
                     catch (ConsumeException e)
                     {
