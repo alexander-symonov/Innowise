@@ -88,8 +88,9 @@ services:
       context: .
       dockerfile: /docker/Dockerfile_processor
     environment:
-      BROKERS_LIST: kafka:9092
+      Kafka__BrokersList: kafka:9092
       INCIDENT_TYPE: FlatIncident
+      IncidentsMongoDb__ConnectionString: mongodb://${MONGODB_LOGIN}:${MONGODB_PASSWORD}@mongo:27017?authSource=insurance
     depends_on:
       - kafka
     networks:
@@ -101,8 +102,9 @@ services:
       context: .
       dockerfile: /docker/Dockerfile_processor
     environment:
-      BROKERS_LIST: kafka:9092
+      Kafka__BrokersList: kafka:9092
       INCIDENT_TYPE: HealthIncident
+      IncidentsMongoDb__ConnectionString: mongodb://${MONGODB_LOGIN}:${MONGODB_PASSWORD}@mongo:27017?authSource=insurance
     depends_on:
       - kafka
     networks:

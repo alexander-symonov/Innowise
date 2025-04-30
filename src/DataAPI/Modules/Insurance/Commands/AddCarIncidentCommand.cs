@@ -20,6 +20,7 @@ namespace DataAPI.Modules.Insurance.Commands
 
             _topicName = topicNamePrefix + nameof(CarIncident);
         }
+
         public Task<bool> ExecuteAsync(CarIncident context)
         {
             var message = new DTO.InsuranceIncidents.CarIncident() { 

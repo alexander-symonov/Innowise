@@ -1,17 +1,25 @@
-﻿using DTO.InsuranceIncidents;
+﻿using Data.Core.Commands;
+using DTO.InsuranceIncidents;
+using System.Text.Json;
 
 namespace DataReader.Processors
 {
     internal class HealthIncidentProcessor : IProcessor
     {
-        public Task ProcessAsync(byte[] data, CancellationToken cancellationToken)
+        private IStoreHealthIncidentCommand _storeHealthIncidentCommand;
+        public HealthIncidentProcessor(IStoreHealthIncidentCommand storeHealthIncidentCommand)
+        {
+            _storeHealthIncidentCommand = storeHealthIncidentCommand;
+        }
+
+        public async Task ProcessAsync(byte[] data, CancellationToken cancellationToken)
         {
             var message = HealthIncident.Parser.ParseFrom(data);
 
-            Console.WriteLine($"Processing HelthIncident: {message}");
-            // TODO: Implement processing logic here
+            await _storeHealthIncidentCommand.ExecuteAsync(message, cancellationToken);
 
-            return Task.CompletedTask;
+            Console.WriteLine($"Processing HelthIncident: {JsonSerializer.Serialize(message)}");
+            // TODO: Implement processing logic here
         }
     }
 }

@@ -30,6 +30,14 @@ var serviceProvider = new ServiceCollection()
         x.GetService<IMongoClient>(), 
         dbSettings.DatabaseName, 
         dbSettings.CarIncidentsCollectionName))
+    .AddSingleton<IStoreFlatIncidentCommand>(x => new StoreFlatIncidentCommand(
+        x.GetService<IMongoClient>(),
+        dbSettings.DatabaseName,
+        dbSettings.FlatIncidentsCollectionName))
+    .AddSingleton<IStoreHealthIncidentCommand>(x => new StoreHealthIncidentCommand(
+        x.GetService<IMongoClient>(),
+        dbSettings.DatabaseName,
+        dbSettings.HealthIncidentsCollectionName))
     .BuildServiceProvider();
 
 var processorFactory = new ProcessorFactory(serviceProvider);

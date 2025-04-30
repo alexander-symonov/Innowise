@@ -18,8 +18,8 @@ namespace DataReader
             return processorType switch
             {
                 nameof(CarIncident) => new CarIncidentProcessor(_serviceProvider.GetService<IStoreCarIncidentCommand>()),
-                nameof(FlatIncident) => new FlatIncidentProcessor(),
-                nameof(HealthIncident) => new HealthIncidentProcessor(),
+                nameof(FlatIncident) => new FlatIncidentProcessor(_serviceProvider.GetService<IStoreFlatIncidentCommand>()),
+                nameof(HealthIncident) => new HealthIncidentProcessor(_serviceProvider.GetService<IStoreHealthIncidentCommand>()),
                 _ => throw new ArgumentException("Invalid processor type " + processorType)
             };
         }

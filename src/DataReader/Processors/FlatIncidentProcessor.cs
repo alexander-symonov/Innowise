@@ -1,17 +1,25 @@
-﻿using DTO.InsuranceIncidents;
+﻿using Data.Core.Commands;
+using DTO.InsuranceIncidents;
+using System.Text.Json;
 
 namespace DataReader.Processors
 {
     internal class FlatIncidentProcessor : IProcessor
     {
-        public Task ProcessAsync(byte[] data, CancellationToken cancellationToken)
+        private readonly IStoreFlatIncidentCommand _storeFlatIncidentCommand;
+        public FlatIncidentProcessor(IStoreFlatIncidentCommand storeFlatIncidentCommand)
+        {
+            _storeFlatIncidentCommand = storeFlatIncidentCommand;
+        }
+
+        public async Task ProcessAsync(byte[] data, CancellationToken cancellationToken)
         {
             var message = FlatIncident.Parser.ParseFrom(data);
 
-            Console.WriteLine($"Processing FlatIncident: {message}");
-            // TODO: Implement processing logic here
+            await _storeFlatIncidentCommand.ExecuteAsync(message, cancellationToken);
 
-            return Task.CompletedTask;
+            Console.WriteLine($"Processing FlatIncident: {JsonSerializer.Serialize(message)}");
+            // TODO: Implement processing logic here
         }
     }
 }
