@@ -18,7 +18,7 @@ var configuration = new ConfigurationBuilder()
 configuration.Bind(ConfigSections.DatabaseSectionName, dbSettings);
 configuration.Bind(ConfigSections.KafkaSectionName, kafkaSettings);
 
-var incidentType = configuration.GetValue<string>("INCIDENT_TYPE") ?? "CarIncident";
+var incidentType = configuration.GetValue<string>("INCIDENT_TYPE") ?? "HealthIncident";
 var topic = kafkaSettings.TopicPrefix + incidentType;
 var groupId = kafkaSettings.GroupPrefix + incidentType;
 
