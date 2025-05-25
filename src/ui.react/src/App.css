@@ -1,0 +1,255 @@
+/* Reset styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, #root {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  height: 100vh; /* Ensure the root container spans the full viewport height */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Logo styles */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+/* Animation for spinning logo */
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+/* Card styles */
+.card {
+  padding: 2em;
+}
+
+/* Documentation link styles */
+.read-the-docs {
+  color: #888;
+}
+
+/* Navigation styles */
+.nav {
+  display: flex;
+  gap: 15px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 5px 10px;
+  transition: color 0.2s;
+}
+
+.nav a:hover,
+.nav a.active {
+  color: #007bff;
+}
+
+/* Header styles */
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #fff;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  height: 60px; /* Set a fixed height for the header */
+}
+
+/* Navigation container */
+header nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Dropdown styles */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 40px; /* Ensures alignment with other menu items */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-menu a {
+  margin-bottom: 5px;
+  text-decoration: none;
+  color: black;
+}
+
+.dropdown-menu a:last-child {
+  margin-bottom: 0;
+}
+
+/* Authentication button styles */
+.logout-button,
+.login-button {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.logout-button {
+  background-color: #dc3545;
+}
+
+.login-button:hover,
+.logout-button:hover {
+  background-color: #0056b3;
+}
+
+/* General button styles */
+header button {
+  font-size: 16px;
+}
+
+header nav div button {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Login page styles */
+.login-page {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-page h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.login-page form div {
+  margin-bottom: 15px;
+}
+
+.login-page label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #333;
+}
+
+.login-page input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.login-page .submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.login-page .login-button:hover {
+  background-color: #0056b3;
+}
+
+/* Reports navigation styles */
+.reports-nav {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.reports-nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 5px 10px;
+  transition: color 0.2s;
+}
+
+.reports-nav a:hover {
+  color: #007bff;
+}
+
+/* Page container styles */
+.page-container {
+  margin-top: 60px; /* Add margin equal to the header height */
+  flex: 1; /* Allow the container to grow and fill available space */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align content to the top */
+  flex-direction: column; /* Stack content vertically */
+  width: 100%; /* Ensure it spans the full width */
+  max-width: 800px; /* Optional: Limit the width of the content */
+  padding: 20px;
+  text-align: center; /* Center text horizontally */
+}
