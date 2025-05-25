@@ -27,7 +27,8 @@ namespace ReportsAPI.Modules.User
                 async (Guid id) => {
                     //var result = await service.GetUserAsync(id);
                     //return result != null ? Results.Ok(result) : Results.NotFound();
-                }).WithMetadata(new SwaggerOperationAttribute(summary: "Get user info"));
+                }).WithMetadata(new SwaggerOperationAttribute(summary: "Get user info"))
+                .RequireCors();
 
             routes.MapGet(
                 apiUrl,
@@ -35,8 +36,8 @@ namespace ReportsAPI.Modules.User
                     var result = await query.ExecuteAsync(CancellationToken.None);
 
                     return Results.Ok(result);
-                }).WithMetadata(new SwaggerOperationAttribute(
-                    summary: "Get all users"));
+                }).WithMetadata(new SwaggerOperationAttribute(summary: "Get all users"))
+                .RequireCors();
         }
     }
 }

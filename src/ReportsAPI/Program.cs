@@ -4,6 +4,7 @@ using ReportsAPI.Modules.Insurance;
 using ReportsAPI.Modules.User;
 using ReportsAPI.Settings;
 
+var corsPolicyName = "CorsPolicy";
 MongoDbSettings mongoDbSettings = new MongoDbSettings();
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
@@ -22,6 +23,15 @@ builder.Services.AddSingleton(sp =>
 {
     var client = sp.GetRequiredService<IMongoClient>();
     return client.GetDatabase(mongoDbSettings.DatabaseName);
+});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: corsPolicyName, policy =>
+    {
+        policy.AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowAnyOrigin();
+    });
 });
 
 builder.Services.RegisterInsuranceModule();
@@ -42,6 +52,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(corsPolicyName);
+
 app.RegisterUserEndpoints("/api/user");
 app.RegisterInsuranceEndpoints("/api/insurance");
 
